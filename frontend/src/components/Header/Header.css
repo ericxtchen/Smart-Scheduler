@@ -10,3 +10,13 @@
   width: 300px;
   height: 59px;
 }
+
+/*.session-button {
+  display: block;
+  transform: translate(650px, 0px);
+}*/
+
+.session-button {
+  margin-left: auto;
+  
+}

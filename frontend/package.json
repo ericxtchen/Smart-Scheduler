@@ -14,8 +14,12 @@
     "@fullcalendar/react": "^6.1.17",
     "@fullcalendar/timegrid": "^6.1.17",
     "@mantine/core": "^7.17.4",
+    "@mantine/form": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
     "@mantine/styles": "^6.0.22",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.49.4",
     "@tabler/icons-react": "^3.31.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
