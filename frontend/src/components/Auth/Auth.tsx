@@ -1,46 +1,25 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js';
 import SignIn from './SignIn/SignIn.tsx';
+import Register from './Register/Register.tsx';
 import './Auth.css';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-export default function Auth({ supabase }: { supabase: any }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+interface AuthProps {
+  supabase: SupabaseClient;
+}
 
-  useEffect(() => {
-    console.log(email);
-  }, [email])
+export default function Auth({ supabase }: AuthProps) {
+  const [showRegister, setShowRegister] = useState(false);
 
-  const handleSignUp = async (e: any) => {
-    e.preventDefault()
-    setLoading(true)
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    })
-
-    if (error) alert(error.message)
-    setLoading(false)
+  const toggleForm = () => {
+    setShowRegister((prev) => !prev);
   }
 
-  const handleSignIn = async (e: any) => {
-    e.preventDefault()
-    setLoading(true)
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) alert(error.message)
-    setLoading(false)
-  }
 
   return (
     <div className='auth'>
-      <SignIn supabase={supabase} />
+      {!showRegister ? (<SignIn supabase={supabase} onToggleForm={toggleForm} />) : (<Register supabase={supabase} onToggleForm={toggleForm} />)}
     </div>
   )
 }

@@ -8,8 +8,3 @@
   box-sizing: border-box;
 }
 
-/* Add this */
-.signin-box > div:first-child {
-  height: 60px; /* Match the height you set in Logo props */
-  margin-bottom: 1rem;
-}

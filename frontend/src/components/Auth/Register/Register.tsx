@@ -2,21 +2,21 @@ import { Paper, Button, Divider, TextInput, Anchor } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Logo from '../../Logo/Logo.tsx';
 import GoogleLogo from '../../Logo/GoogleLogo.tsx';
-import './SignIn.css'
 import { SupabaseClient } from '@supabase/supabase-js';
 
 
-interface SignInProps {
+interface RegisterProps {
   supabase: SupabaseClient;
   onToggleForm: () => void;
 }
 
-export default function SignIn({ supabase, onToggleForm }: SignInProps) {
+export default function Register({ supabase, onToggleForm }: RegisterProps) {
 
   const form = useForm({
     initialValues: {
       email: '',
       password: '',
+      name: '',
     },
 
     validate: {
@@ -25,23 +25,31 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
     },
   });
 
-  async function signInWithEmail() {
-    const { data, error } = await supabase.auth.signInWithPassword({
+  async function signUpNewUser() {
+    const { data, error } = await supabase.auth.signUp({
       email: form.values.email,
       password: form.values.password,
     })
   }
-
   // Do i make the Paper a flex display or do I use a div and make that a flex display?
   return (
     <Paper radius='md' shadow='xl' className='signin-box' w={400} p={30}>
       <Logo height={60} width={350} />
       <Button variant='default' fullWidth>
         <GoogleLogo size={14} />
-        Sign in with Google
+        Register with Google
       </Button>
       <Divider my='md' label="Or continue with email" labelPosition='center' />
       <form onSubmit={form.onSubmit(() => { })} style={{ width: '100%' }} >
+        <TextInput
+          label="Name:"
+          withAsterisk
+          placeholder='Name'
+          value={form.values.name}
+          onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
+          radius='md'
+        />
+
         <TextInput
           label="Email:"
           withAsterisk
@@ -60,10 +68,10 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
           radius='md'
         />
 
-        <Button fullWidth radius='md' onClick={signInWithEmail}>Sign In</Button>
+        <Button fullWidth radius='md' onClick={signUpNewUser}>Register</Button>
 
         <Anchor component='button' type='button' c='dimmed' onClick={onToggleForm}>
-          Don't have an account? Register
+          Already have an account? Sign in
         </Anchor>
       </form>
     </Paper >

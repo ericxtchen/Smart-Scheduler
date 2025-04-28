@@ -6,11 +6,10 @@ import { MantineProvider } from '@mantine/core'
 import { createClient, Session } from '@supabase/supabase-js'
 import Auth from './components/Auth/Auth.tsx'
 
-const supabase = createClient('https://ytxihfzapbdifbxdsfmz.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0eGloZnphcGJkaWZieGRzZm16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU0NTMwMDMsImV4cCI6MjA2MTAyOTAwM30.cP7Nvc7gZxFx3DTRFuCDnU53uGXy8xQ73eVXWT6TNLw');
-
+const supabase = createClient(import.meta.env.VITE_PROJECT_URL, import.meta.env.VITE_ANON_KEY);
 
 function App() {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>(null); // is Auth supposed to return something to change session?
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
