@@ -29,7 +29,13 @@ export default function Register({ supabase, onToggleForm }: RegisterProps) {
     const { data, error } = await supabase.auth.signUp({
       email: form.values.email,
       password: form.values.password,
-    })
+      options: {
+        data: {
+          name: form.values.name,
+        },
+      },
+    });
+    if (error) console.log("Registration Error: ", error);
   }
   // Do i make the Paper a flex display or do I use a div and make that a flex display?
   return (

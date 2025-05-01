@@ -5,11 +5,12 @@ import Header from './components/Header/Header.tsx'
 import { MantineProvider } from '@mantine/core'
 import { createClient, Session } from '@supabase/supabase-js'
 import Auth from './components/Auth/Auth.tsx'
+import Upload from './components/Upload/Upload.tsx';
 
 const supabase = createClient(import.meta.env.VITE_PROJECT_URL, import.meta.env.VITE_ANON_KEY);
 
 function App() {
-  const [session, setSession] = useState<Session | null>(null); // is Auth supposed to return something to change session?
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -32,6 +33,7 @@ function App() {
       ) : (
         <>
           <Header />
+          <Upload token={session.access_token} />
           <Calendar />
         </>
       )}
