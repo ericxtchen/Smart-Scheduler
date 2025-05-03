@@ -1,27 +1,44 @@
-import multer, { FileFilterCallback } from 'multer';
-import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import multer from 'multer';
+import { fileTypeFromBuffer } from 'file-type';
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Create an 'uploads' folder if it doesn't exist
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.originalname + '-' + uniqueSuffix + '.' + file.originalname.split('.').pop());
-  }
-});
 
-const filefilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
-  if (file.mimetype === 'text/calendar') {
-    cb(null, true);
-  } else {
-    cb(new Error('Only .ics files are allowed'));
+const storage = multer.memoryStorage();
+
+const validateICSType = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Now the file is available in req.file
+    if (!req.file || !req.file.buffer) {
+      res.status(400).json({ error: 'No file or file buffer found' });
+      return;
+    }
+
+    const buffer = req.file.buffer;
+    const type = await fileTypeFromBuffer(buffer);
+    const allowedTypes = ["text/calendar"];
+
+    if (!type || !allowedTypes.includes(type.mime)) {
+      res.status(400).json({ error: 'Invalid file type. Only calendar files are allowed.' });
+      return;
+    }
+
+    next();
+    return;
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+    res.status(500).json({ error: 'An unknown error occurred' });
+    return;
   }
 };
 
+
 const icsUpload = multer({
   storage: storage,
-  fileFilter: filefilter
+  limits: { fileSize: 10 * 1024 * 1024 }
 });
 
+export { validateICSType };
 export default icsUpload;

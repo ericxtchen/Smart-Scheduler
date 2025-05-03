@@ -1,9 +1,6 @@
-import multer, { FileFilterCallback } from 'multer';
-import { Request } from 'express';
-import fs from 'fs';
-import path from 'path';
+import multer from 'multer';
+import { NextFunction, Request, Response } from 'express';
 import { fileTypeFromBuffer } from "file-type";
-import { Express } from 'express';
 
 //const storage = multer.diskStorage({
 //  destination: (req, file, cb) => {
@@ -44,27 +41,32 @@ const storage = multer.memoryStorage();
 //}
 //};
 
-const validateFileType = async (req: Request, res: any, next: any) => {
+const validateImageType = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Now the file is available in req.file
     if (!req.file || !req.file.buffer) {
-      return res.status(400).json({ error: 'No file or file buffer found' });
+      res.status(400).json({ error: 'No file or file buffer found' });
+      return;
     }
 
     const buffer = req.file.buffer;
+    console.log(buffer);
     const type = await fileTypeFromBuffer(buffer);
     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
     if (!type || !allowedTypes.includes(type.mime)) {
-      return res.status(400).json({ error: 'Invalid file type. Only JPEG, JPG, and PNG are allowed.' });
+      res.status(400).json({ error: 'Invalid file type. Only JPEG, JPG, and PNG are allowed.' });
+      return;
     }
 
     next();
   } catch (error) {
     if (error instanceof Error) {
-      return res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
+      return;
     }
-    return res.status(500).json({ error: 'An unknown error occurred' });
+    res.status(500).json({ error: 'An unknown error occurred' });
+    return;
   }
 };
 
@@ -74,5 +76,5 @@ const imgUpload = multer({
   //fileFilter: filefilter,
   limits: { fileSize: 10 * 1024 * 1024 }
 });
-export { validateFileType };
+export { validateImageType };
 export default imgUpload;
