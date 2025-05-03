@@ -5,7 +5,7 @@ import { corsMiddleware } from './middlewares/cors';
 const app = express();
 
 app.use(corsMiddleware);
-app.use(express.json());
+//app.use(express.json());
 app.use('/api', uploadRouter);
 
 export default app;
