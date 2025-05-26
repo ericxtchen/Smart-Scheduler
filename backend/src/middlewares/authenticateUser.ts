@@ -1,9 +1,18 @@
 import { createClient, User } from "@supabase/supabase-js";
 import { Response, Request, NextFunction } from "express";
+import 'express';
 require("dotenv").config();
 
-interface AuthenticatedRequest extends Request {
-  user?: User;
+//interface AuthenticatedRequest extends Request {
+//user?: User;
+//}
+declare global {
+  namespace Express {
+    // Extend the Request interface right here in this file
+    interface Request {
+      user?: User;
+    }
+  }
 }
 
 export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,7 +32,7 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
     const { data: { user }, error } = await supabase.auth.getUser(token);
     if (error || !user) { res.status(401).json({ error: 'Invalid token' }).end(); return; }
 
-    (req as AuthenticatedRequest).user = user; // stil gives an error
+    req.user = user; // stil gives an error
     next();
     return;
   } catch (error) {
