@@ -31,7 +31,7 @@ const parseICS = async (req: Request, res: Response) => {
     }
 
     // check if the body is not empty instead
-    if (req.body) { // if url is uploaded
+    else if (req.body) { // if url is uploaded
       const url = JSON.stringify(req.body);
       if (!url) {
         res.status(400).json({ error: 'URL is required' });
