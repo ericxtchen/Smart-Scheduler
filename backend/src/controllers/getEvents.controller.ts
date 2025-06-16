@@ -3,6 +3,9 @@ import { db } from '../db/index';
 import { userCalendars, events, calendarSources } from '../db/schema';
 import { eq, and, gte, lte, inArray } from 'drizzle-orm';
 
+//TODO:
+//Test this endpoint and functionality``
+
 
 type calInfo = {
   [key: string]: information

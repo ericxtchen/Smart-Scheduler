@@ -2,6 +2,8 @@ import express from 'express';
 import { authenticateUser } from '../middlewares/authenticateUser';
 import { getEvents } from '../controllers/getEvents.controller';
 
-const router = express.Router();
+const eventsRouter = express.Router();
 
-router.get("/api/calendar/events", authenticateUser, getEvents);
+eventsRouter.get("/calendar/events", authenticateUser, getEvents);
+
+export default eventsRouter;
