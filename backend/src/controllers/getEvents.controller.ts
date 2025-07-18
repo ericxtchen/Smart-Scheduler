@@ -4,7 +4,7 @@ import { userCalendars, events, calendarSources } from '../db/schema';
 import { eq, and, gte, lte, inArray } from 'drizzle-orm';
 
 //TODO:
-//Test this endpoint and functionality``
+//Test this endpoint and functionality
 
 
 type calInfo = {
@@ -83,9 +83,9 @@ const getEvents = async (req: Request, res: Response) => {
 
         description: event.description,
         location: event.location,
-        status: event.status,
-        categories: event.categories,
-        url: event.url,
+        //status: event.status,
+        //categories: event.categories,
+        //url: event.url,
         calendarName: calendarInfo.name,
         externalId: event.externalId
       }

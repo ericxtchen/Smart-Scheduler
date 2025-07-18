@@ -33,7 +33,8 @@ export const userCalendars = pgTable('user_calendars', {
 
 export const events = pgTable('events', {
   id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
-  calendarSourceId: uuid('calendar_source_id').notNull().references(() => calendarSources.id, { onDelete: 'cascade' }).unique(),
+  // got rid of .unique() for calendarSourceId because multiple events can come form the same calendar source ...
+  calendarSourceId: uuid('calendar_source_id').notNull().references(() => calendarSources.id, { onDelete: 'cascade' }),
   externalId: text('external_id').notNull().unique(),
   title: text('title').notNull(),
   description: text('description'),
@@ -41,13 +42,13 @@ export const events = pgTable('events', {
   startTime: timestamp('start_time', { withTimezone: true }).notNull(),
   endTime: timestamp('end_time', { withTimezone: true }),
   allDay: boolean('all_day').default(false),
-  recurrenceRule: jsonb('recurrence_rule'),
+  //recurrenceRule: jsonb('recurrence_rule'),
   lastModified: timestamp('last_modified', { withTimezone: true }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
-  status: text('status').default('confirmed'),
-  categories: text('categories').array(),
-  url: text('url'),
-  attendees: jsonb('attendees')
+  //status: text('status').default('confirmed'),
+  //categories: text('categories').array(),
+  //url: text('url'),
+  //attendees: jsonb('attendees')
 }, (table) => [
   uniqueIndex('event_unique_idx').on(table.calendarSourceId, table.externalId)
 ]);
