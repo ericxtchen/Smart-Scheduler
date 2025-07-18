@@ -1,17 +1,8 @@
-import ICAL from 'ical.js'; //use node-ical to get ics from url as I am no longer supporting strict ics file
-// or deliver the ics link to backend via http, fetch the url, validate it, save it to disk, and then use ICAL on it?
+import ICAL from 'ical.js';
 import { Request, Response } from 'express';
 import { db } from '../db/index';
 import { calendarSources, events, userCalendars } from '../db/schema';
 import { eq, inArray } from 'drizzle-orm';
-
-// TODO :
-// Change this code to only get data from ics links as well.
-// Maybe also support ics files that add a single event to the calendar
-// Put the events into the database.
-// A lot of repetitve code as the events need to be parsed and put in the database the same way regardless if it is a file or url
-// Maybe put some of the code into a common function
-//
 
 interface EventInterface {
   id?: string,
@@ -30,7 +21,6 @@ interface EventInterface {
 const parseICS = async (req: Request, res: Response) => {
   try {
     if (req.file) {
-      console.log("WE ARE HERE!!!!!!")
       // INSERT INTO CALENDAR SOURCES 
       const name = req.user!.id + Math.random().toString(36).slice(2);
       const [newCalendarSource] = await db.insert(calendarSources)
@@ -178,18 +168,6 @@ const parseICS = async (req: Request, res: Response) => {
         console.log("Done updating events.")
       }
 
-      /*
-      const calsrc = await db.query.calendarSources.findFirst({
-        where: eq(calendarSources.name, name)
-      });
-      const calsrcid = calsrc!.id;
-      await db.insert(events).values({
-        calendarSourceId: calsrcid,
-        externalId: 
-      })
-      */
-      //await db.insert(events).values({ calendar_sou })
-      //console.log(db.select().from(users).then((allUsers) => console.log(allUsers))) // does this query the users table in the public schema? output looks generic
       res.status(200).json({ sucess: true, message: 'Calendar and events imported successfully.', added_events: addedCount, updated_events: updatedCount });
     }
 
