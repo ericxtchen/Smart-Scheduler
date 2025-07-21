@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Calendar from './components/Calendar/Calendar.tsx'
 import Header from './components/Header/Header.tsx'
@@ -6,15 +6,17 @@ import { MantineProvider } from '@mantine/core'
 import { createClient, Session } from '@supabase/supabase-js'
 import Auth from './components/Auth/Auth.tsx'
 import Upload from './components/Upload/Upload.tsx';
+import FullCalendar from '@fullcalendar/react'
 
 const supabase = createClient(import.meta.env.VITE_PROJECT_URL, import.meta.env.VITE_ANON_KEY);
 
 function App() {
+  const calendarRef = useRef<FullCalendar | null>(null);
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
+      setSession(session);
     })
 
     const {
@@ -26,6 +28,7 @@ function App() {
     return () => subscription.unsubscribe()
   }, [])
 
+
   return (
     <MantineProvider>
       {!session ? (
@@ -33,8 +36,8 @@ function App() {
       ) : (
         <>
           <Header />
-          <Upload token={session.access_token} />
-          <Calendar token={session.access_token}/>
+          <Upload token={session.access_token} ref={calendarRef} />
+          <Calendar token={session.access_token} ref={calendarRef} />
         </>
       )}
     </MantineProvider>

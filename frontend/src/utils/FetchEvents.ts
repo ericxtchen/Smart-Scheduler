@@ -4,7 +4,7 @@
 
 
 export default async function fetchEvents(token: string) {
-  try {  
+  try {
     const endpoint = "http://localhost:3000/api/calendar/events";
     const response = await fetch(endpoint, {
       method: 'GET',
@@ -13,8 +13,8 @@ export default async function fetchEvents(token: string) {
         'Content-Type': 'application/json',
       },
     });
-    
-    if(!response.ok) throw new Error("Failed to get events.")
+
+    if (!response.ok) throw new Error("Failed to get events.")
     const eventsData = await response.json();
 
     return eventsData;
