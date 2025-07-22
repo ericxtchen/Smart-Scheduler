@@ -9,7 +9,7 @@ import FullCalendar from '@fullcalendar/react';
 
 interface UploadProps {
   token: string,
-  ref: React.RefObject<FullCalendar>
+  ref: React.RefObject<FullCalendar | null>
 }
 
 export default function Upload({ token, ref }: UploadProps) {

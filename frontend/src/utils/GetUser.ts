@@ -1,19 +1,14 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
-export default async function GetUser(token: string | undefined, supabase: SupabaseClient) {
-  const gettoken = token!.split(" ")[1];
-
+export default async function GetUser(supabase: SupabaseClient) {
   try {
-    const { data: { user }, error } = await supabase.auth.getUser(gettoken);
-    if (error || !user) {
-      throw error;
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+      throw error
     }
-    return user;
-  } catch (error) {
-    if (error instanceof Error) {
-      alert(`${error.message}`);
-    }
-    return;
+    return user!.id;
+  } catch {
+    alert("Error getting user information.");
   }
 
 }

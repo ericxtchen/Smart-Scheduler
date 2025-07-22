@@ -1,9 +1,10 @@
 import express from 'express';
-import { authenticateUser } from '../middlewares/authenticateUser';
-import { getEvents } from '../controllers/getEvents.controller';
+import getEvents from '../controllers/getEvents';
+import getUserCalendarSources from '../controllers/getUserCalendarSources';
 
 const eventsRouter = express.Router();
 
-eventsRouter.get("/calendar/events", authenticateUser, getEvents);
+eventsRouter.get("/user-calendar-sources/:userId", getUserCalendarSources);
+eventsRouter.get("/events/:calendarSourceId", getEvents);
 
 export default eventsRouter;
