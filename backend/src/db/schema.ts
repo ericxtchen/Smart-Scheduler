@@ -1,5 +1,7 @@
-import { pgSchema, pgTable, text, uuid, boolean, timestamp, check, jsonb, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgSchema, pgTable, text, uuid, boolean, timestamp, check, jsonb, uniqueIndex, integer } from "drizzle-orm/pg-core";
 import { sql, relations } from "drizzle-orm";
+import { title } from "node:process";
+import { timeStamp } from "node:console";
 
 
 export const users = pgTable("users", {
@@ -22,7 +24,7 @@ export const calendarSources = pgTable('calendar_sources', { //maybe remove opti
 
 export const userCalendars = pgTable('user_calendars', {
   id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }).unique(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   calendarSourceId: uuid('calendar_source_id').notNull().references(() => calendarSources.id, { onDelete: 'cascade' }).unique(),
   isVisible: boolean('is_visible').default(true),
   color: text('color').default('#4F46E5'),
@@ -64,6 +66,27 @@ export const calendarSyncLogs = pgTable('calendar_sync_logs', {
   eventsRemoved: text('events_removed').default('0'),
   errorMessage: text('error_message'),
   details: jsonb('details')
+});
+
+export const aiOutput = pgTable('ai_output', {
+  id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+  userId: uuid('user_id').notNull().references(() => users.id),
+  name: text('name').notNull(),
+  imageUrl: text('image_url'),
+  parsedOutput: jsonb('parsed_output'), // the AI's output
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow()
+});
+
+export const scheduleEvents = pgTable('schedule_events', {
+  id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+  aiOutputId: uuid('aiOutputId').references(() => aiOutput.id),
+  courseName: text('course_name').notNull(), //description for the event object
+  courseCode: text('course_code').notNull(), //title for the event object
+  location: text('location'),
+  startTime: timestamp('start_time', { withTimezone: true }).notNull(),
+  endTime: timestamp('end_time', { withTimezone: true }),
+  dayOfTheWeek: integer('day_of_the_week'),
 });
 
 // Define relations between tables

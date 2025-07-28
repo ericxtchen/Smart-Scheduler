@@ -50,7 +50,7 @@ const validateImageType = async (req: Request, res: Response, next: NextFunction
     }
 
     const buffer = req.file.buffer;
-    console.log(buffer);
+    //console.log(buffer);
     const type = await fileTypeFromBuffer(buffer);
     const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 

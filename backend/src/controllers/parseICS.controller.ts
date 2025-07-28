@@ -187,29 +187,26 @@ const parseICS = async (req: Request, res: Response) => {
         });
       }
 
-      const icsData = await response.text();
+      // INSERT INTO CALENDAR SOURCES
+      const name = "asdasdasdasdsadas";
+      const [newCalendarSourceId] = await db.insert(calendarSources)
+        .values({
+          name: name,
+          createdBy: req.user!.id,
+          url: url
+        })
+        .returning({ id: calendarSources.id });
 
-      // Parse with ical.js
-      const jcalData = ICAL.parse(icsData);
-      const comp = new ICAL.Component(jcalData);
-      const vevents = comp.getAllSubcomponents('vevent');
+      const calendarSourceId = newCalendarSourceId.id;
 
-      // Format events for response
-      const formattedEvents = vevents.map(vevent => {
-        const event = new ICAL.Event(vevent);
-
-        return {
-          uid: event.uid,
-          summary: event.summary,
-          description: event.description || '',
-          location: event.location || '',
-          start: event.startDate.toJSDate(),
-          end: event.endDate.toJSDate(),
-          isRecurring: event.isRecurring(),
-          // Include additional properties as needed
-        };
-      });
-      res.status(200).json({ success: 'true', formattedEvents });
+      // INSERT INTO USER CALENDARS
+      await db.insert(userCalendars)
+        .values({
+          userId: req.user!.id,
+          calendarSourceId: calendarSourceId,
+          isVisible: true,
+          color: "#4F46E5"
+        })
     }
 
   } catch (error) {

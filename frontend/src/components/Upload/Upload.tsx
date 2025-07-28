@@ -1,10 +1,10 @@
-import { Paper, Button, Modal, TextInput } from '@mantine/core';
+import { Paper, Button, Modal, TextInput, FileInput } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import './Upload.css';
-import React, { useRef, Ref } from 'react';
+import React, { useRef } from 'react';
 import { UploadFile, UploadLink } from '../../utils/UploadFile';
-import { Session } from '@supabase/supabase-js';
 import FullCalendar from '@fullcalendar/react';
 
 interface UploadProps {
@@ -12,12 +12,17 @@ interface UploadProps {
   ref: React.RefObject<FullCalendar | null>
 }
 
+interface ImgErrorValidation {
+  [key: string]: string
+}
+
 export default function Upload({ token, ref }: UploadProps) {
   const icsRef = useRef<HTMLInputElement | null>(null);
   const imgRef = useRef<HTMLInputElement | null>(null);
   const pdfRef = useRef<HTMLInputElement | null>(null);
 
-  const [opened, { open, close }] = useDisclosure(false);
+  const [icsOpened, { open: openICSModal, close: closeICSModal }] = useDisclosure(false);
+  const [imgOpened, { open: openImgModal, close: closeImgModal }] = useDisclosure(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fileType: string) => {
     if (e.target.files) {
@@ -43,6 +48,64 @@ export default function Upload({ token, ref }: UploadProps) {
 
   }
 
+  const imgForm = useForm({
+    initialValues: {
+      uploadedFile: null,
+      semesterStart: null,
+      semesterEnd: null
+    },
+
+    validate: (values) => {
+      const errors: ImgErrorValidation = {}
+      if (values.uploadedFile === null) {
+        errors.uploadedFile = "Please upload an image of your class schedule";
+      }
+      if (!values.semesterStart) {
+        errors.semesterStart = "Please input a date for the start of your semester.";
+      }
+      if (!values.semesterEnd) {
+        errors.semesterEnd = "Please input a date for the end of your semester.";
+      }
+      if (values.semesterStart && values.semesterEnd) {
+        const start = new Date(values.semesterStart);
+        const end = new Date(values.semesterEnd);
+        if (end <= start) {
+          errors.semesterEnd = "The end of your semester cannot be earlier than the start."
+        }
+      }
+
+      return errors;
+    }
+  })
+
+  const handleImgSubmit = async (values: any) => {
+    console.log("Type of uploadedFile ", typeof values.uploadedFile);
+    console.log("uploadedFile: ", values.uploadedFile);
+    console.log("Type of semesterStart ", typeof values.semesterStart);
+    console.log("semesterStart ", values.semesterStart);
+
+    const endpoint = 'http://localhost:3000/api/upload-image';
+    const formData = new FormData();
+    formData.append('image', values.uploadedFile);
+    formData.append('semesterStart', values.semesterStart);
+    formData.append('semesterEnd', values.semesterEnd);
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+      if (!response.ok) { throw new Error("Image Upload Response was not ok"); }
+      alert("File uploaded successfully.");
+    } catch (error) {
+      alert(error);
+    }
+
+  }
+
   const icsLinkForm = useForm({
     initialValues: {
       link: ''
@@ -56,7 +119,7 @@ export default function Upload({ token, ref }: UploadProps) {
     <div className='div-upload'>
       <Paper shadow='md' radius='md' className='upload' style={{ display: 'flex', marginRight: 'auto', gap: '1rem' }} w='50%'>
         Upload a file:
-        <Modal opened={opened} onClose={close} title="Upload an ics file or link">
+        <Modal opened={icsOpened} onClose={closeICSModal} title="Upload an ics file or link">
           <Button onClick={() => checkRefNull(icsRef)}>Upload an ics file</Button>
           <input type='file' ref={icsRef} accept='.ics, text/calendar' onChange={(e) => handleFileChange(e, 'ics')} style={{ display: 'none' }} />
 
@@ -70,8 +133,31 @@ export default function Upload({ token, ref }: UploadProps) {
 
           </form>
         </Modal>
-        <Button onClick={open}>Upload an ics file or link</Button>
-        <Button onClick={() => checkRefNull(imgRef)}>Upload your schedule</Button>
+        <Button onClick={openICSModal}>Upload an ics file or link</Button>
+
+        <Modal opened={imgOpened} onClose={closeImgModal} title="Upload your schedule as an image">
+          <form onSubmit={imgForm.onSubmit(handleImgSubmit)}>
+            <FileInput mt="md" label="Upload Schedule" placeholder="Click to select or drag file" {...imgForm.getInputProps('uploadedFile')} accept='image/png, image/jpg' />
+            <DatePickerInput
+              mt='md'
+              placeholder='Start'
+              label='Start of your Semester'
+              withAsterisk
+              valueFormat='YYYY-MM-DD'
+              {...imgForm.getInputProps('semesterStart')}
+            />
+            <DatePickerInput
+              mt='md'
+              placeholder='End'
+              label='End of your Semester'
+              withAsterisk
+              valueFormat='YYYY-MM-DD'
+              {...imgForm.getInputProps('semesterEnd')}
+            />
+            <Button type='submit'>Submit</Button>
+          </form>
+        </Modal>
+        <Button onClick={openImgModal}>Upload your schedule</Button>
         <input type='file' ref={imgRef} accept='image/*' onChange={(e) => handleFileChange(e, 'image')} style={{ display: 'none' }} />
         <Button onClick={() => checkRefNull(pdfRef)}>Upload your syllabus</Button>
         <input type='file' ref={pdfRef} accept='.pdf, application/pdf' onChange={(e) => handleFileChange(e, 'pdf')} style={{ display: 'none' }} />
