@@ -1,7 +1,5 @@
-import { pgSchema, pgTable, text, uuid, boolean, timestamp, check, jsonb, uniqueIndex, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, boolean, timestamp, check, jsonb, uniqueIndex, integer } from "drizzle-orm/pg-core";
 import { sql, relations } from "drizzle-orm";
-import { title } from "node:process";
-import { timeStamp } from "node:console";
 
 
 export const users = pgTable("users", {
@@ -84,9 +82,9 @@ export const scheduleEvents = pgTable('schedule_events', {
   courseName: text('course_name').notNull(), //description for the event object
   courseCode: text('course_code').notNull(), //title for the event object
   location: text('location'),
-  startTime: timestamp('start_time', { withTimezone: true }).notNull(),
-  endTime: timestamp('end_time', { withTimezone: true }),
-  dayOfTheWeek: integer('day_of_the_week'),
+  startTime: text('start_time').notNull(),
+  endTime: text('end_time'),
+  dayOfTheWeek: integer('day_of_the_week').array(),
 });
 
 // Define relations between tables
