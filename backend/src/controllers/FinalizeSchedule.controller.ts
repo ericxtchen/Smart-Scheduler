@@ -13,6 +13,8 @@ interface EventsToInsertInterface {
   courseName: string,
   courseCode: string,
   location: string,
+  startRecur: string,
+  endRecur: string,
   startTime: string,
   endTime: string,
   dayOfTheWeek: number[]
@@ -42,6 +44,9 @@ export const FinalizeSchedule = async (req: Request, res: Response) => {
     const validatedData = ParsedScheduleSchema.parse(req.body.data);
     const semesterStart = req.body.semesterStart;
     const semesterEnd = req.body.semesterEnd;
+    const endDate = new Date(semesterEnd);
+    endDate.setDate(endDate.getDate() + 1);
+    const endRecurString = endDate.toISOString().split('T')[0];
 
     // CHECK IF COURSE IS IN ARRAY BY CHECKING COURSE CODE
     // LOOP THROUGH COURSES 
@@ -71,6 +76,8 @@ export const FinalizeSchedule = async (req: Request, res: Response) => {
               courseCode: eventObj.courseCode + ` (${occurrence + 1})`,
               courseName: eventObj.courseName,
               location: eventObj.location,
+              startRecur: semesterStart,
+              endRecur: endRecurString,
               startTime: event.startTime,
               endTime: event.endTime,
               dayOfTheWeek: [dayOfWeekMap[event.dayOfWeek]]
@@ -83,6 +90,8 @@ export const FinalizeSchedule = async (req: Request, res: Response) => {
             courseCode: course.courseCode,
             courseName: course.courseName,
             location: event.location,
+            startRecur: semesterStart,
+            endRecur: endRecurString,
             startTime: event.startTime,
             endTime: event.endTime,
             dayOfTheWeek: [dayOfWeekMap[event.dayOfWeek]]

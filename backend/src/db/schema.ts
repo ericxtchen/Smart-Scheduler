@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, boolean, timestamp, check, jsonb, uniqueIndex, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, boolean, timestamp, check, jsonb, uniqueIndex, integer, time, date } from "drizzle-orm/pg-core";
 import { sql, relations } from "drizzle-orm";
 
 
@@ -82,8 +82,10 @@ export const scheduleEvents = pgTable('schedule_events', {
   courseName: text('course_name').notNull(), //description for the event object
   courseCode: text('course_code').notNull(), //title for the event object
   location: text('location'),
-  startTime: text('start_time').notNull(),
-  endTime: text('end_time'),
+  startRecur: date('start_recur').notNull(),
+  endRecur: date('end_recur'),
+  startTime: time('start_time').notNull(),
+  endTime: time('end_time'),
   dayOfTheWeek: integer('day_of_the_week').array(),
 });
 
