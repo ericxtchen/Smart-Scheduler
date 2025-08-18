@@ -22,6 +22,7 @@ interface CalendarSource {
 }
 
 export default function CalendarComponent({ ref, supabase }: CalendarProps) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [eventSources, setEventSources] = useState<EventSourceInput[]>([]);
 
   useEffect(() => {
@@ -29,18 +30,18 @@ export default function CalendarComponent({ ref, supabase }: CalendarProps) {
       const userId = await GetUser(supabase);
       if (userId) {
         try {
-          const response = await fetch(`http://localhost:3000/api/user-calendar-sources/${userId}`);
+          const response = await fetch(`${API_BASE_URL}/api/user-calendar-sources/${userId}`);
           const calendarSources: CalendarSource[] = await response.json();
           const sources: EventSourceInput[] = calendarSources.map((source) => {
             if (source.hasStoredEvents) {
               return {
-                url: `http://localhost:3000/api/events/${source.calendarSourceId}`,
+                url: `${API_BASE_URL}/api/events/${source.calendarSourceId}`,
                 backgroundColor: source.color,
                 textColor: '#ffffff'
               } as EventSourceInput;
             } else {
               return {
-                url: `http://localhost:3000/api/ics-proxy/${source.url}`, // use backend as proxy to avoid CORS errors
+                url: `${API_BASE_URL}/api/ics-proxy/${source.url}`, // use backend as proxy to avoid CORS errors
                 format: 'ics',
                 backgroundColor: source.color,
                 textColor: '#ffffff'

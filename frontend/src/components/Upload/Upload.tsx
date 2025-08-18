@@ -20,6 +20,8 @@ interface ImgErrorValidation {
 }
 
 export default function Upload({ token, ref: calendarRef }: UploadProps) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const icsRef = useRef<HTMLInputElement | null>(null);
   const pdfRef = useRef<HTMLInputElement | null>(null);
 
@@ -95,7 +97,7 @@ export default function Upload({ token, ref: calendarRef }: UploadProps) {
     setSemStart(values.semesterStart);
     setSemEnd(values.semesterEnd);
 
-    const endpoint = 'http://localhost:3000/api/upload-image';
+    const endpoint = `${API_BASE_URL}/api/upload-image`;
     const formData = new FormData();
     formData.append('image', values.uploadedFile);
     formData.append('semesterStart', (new Date(values.semesterStart)).toISOString());
@@ -132,7 +134,7 @@ export default function Upload({ token, ref: calendarRef }: UploadProps) {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/api/schedules/finalize", {
+      const response = await fetch(`${API_BASE_URL}/api/schedules/finalize`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
