@@ -106,6 +106,4 @@ export const FinalizeSchedule = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
   }
-  // insert to aiOutput in the parseImg controller? and then grab the correct aiOutputId by searching for the latest 
-
 } 

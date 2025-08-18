@@ -34,8 +34,8 @@ export const userCalendars = pgTable('user_calendars', {
 export const events = pgTable('events', {
   id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
   // got rid of .unique() for calendarSourceId because multiple events can come form the same calendar source ...
-  calendarSourceId: uuid('calendar_source_id').notNull().references(() => calendarSources.id, { onDelete: 'cascade' }),
-  externalId: text('external_id').notNull().unique(),
+  calendarSourceId: uuid('calendar_source_id').references(() => calendarSources.id, { onDelete: 'cascade' }), // got rid of notNull to allow user added and pdf events
+  externalId: text('external_id').unique(), // got rid of notNull to add user added and pdf events
   title: text('title').notNull(),
   description: text('description'),
   location: text('location'),

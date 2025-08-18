@@ -41,7 +41,7 @@ export default function CalendarComponent({ token, ref, supabase }: CalendarProp
               } as EventSourceInput;
             } else {
               return {
-                url: source.url,
+                url: `http://localhost:3000/api/ics-proxy/${source.url}`, // use backend as proxy to avoid CORS errors
                 format: 'ics',
                 backgroundColor: source.color,
                 textColor: '#ffffff'
