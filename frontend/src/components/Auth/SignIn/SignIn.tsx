@@ -26,10 +26,18 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
   });
 
   async function signInWithEmail() {
-    await supabase.auth.signInWithPassword({
-      email: form.values.email,
-      password: form.values.password,
-    })
+    const { data, error } = await supabase.auth.signInWithPassword({
+    email: form.values.email,
+    password: form.values.password,
+    });
+  
+    if (error) {
+      console.log("Login Error: ", error);
+      return { success: false, error: error.message };
+    }
+  
+    console.log("User logged in:", data.user);
+    return { success: true, data };
   }
 
   // Do i make the Paper a flex display or do I use a div and make that a flex display?

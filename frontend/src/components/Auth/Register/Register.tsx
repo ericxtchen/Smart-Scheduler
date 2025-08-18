@@ -26,7 +26,7 @@ export default function Register({ supabase, onToggleForm }: RegisterProps) {
   });
 
   async function signUpNewUser() {
-    const { data:_, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: form.values.email,
       password: form.values.password,
       options: {
@@ -36,6 +36,8 @@ export default function Register({ supabase, onToggleForm }: RegisterProps) {
       },
     });
     if (error) console.log("Registration Error: ", error);
+
+    console.log("User registered: ", data);
   }
   // Do i make the Paper a flex display or do I use a div and make that a flex display?
   return (
