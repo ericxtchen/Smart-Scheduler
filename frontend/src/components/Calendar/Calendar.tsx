@@ -9,7 +9,6 @@ import GetUser from '../../utils/GetUser';
 import { EventSourceInput } from '@fullcalendar/core/index.js';
 
 interface CalendarProps {
-  token: string,
   ref: React.RefObject<FullCalendar | null>,
   supabase: SupabaseClient
 }
@@ -22,7 +21,7 @@ interface CalendarSource {
   hasStoredEvents: boolean
 }
 
-export default function CalendarComponent({ token, ref, supabase }: CalendarProps) {
+export default function CalendarComponent({ ref, supabase }: CalendarProps) {
   const [eventSources, setEventSources] = useState<EventSourceInput[]>([]);
 
   useEffect(() => {

@@ -26,7 +26,7 @@ export default function Register({ supabase, onToggleForm }: RegisterProps) {
   });
 
   async function signUpNewUser() {
-    const { data, error } = await supabase.auth.signUp({
+    const { data:_, error } = await supabase.auth.signUp({
       email: form.values.email,
       password: form.values.password,
       options: {

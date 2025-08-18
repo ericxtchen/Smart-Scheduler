@@ -37,7 +37,7 @@ function App() {
         <>
           <Header />
           <Upload token={session.access_token} ref={calendarRef} />
-          <Calendar token={session.access_token} ref={calendarRef} supabase={supabase} />
+          <Calendar ref={calendarRef} supabase={supabase} />
         </>
       )}
     </MantineProvider>

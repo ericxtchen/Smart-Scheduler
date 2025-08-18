@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js';
+import { useState } from 'react'
 import SignIn from './SignIn/SignIn.tsx';
 import Register from './Register/Register.tsx';
 import './Auth.css';

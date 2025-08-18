@@ -1,6 +1,6 @@
 import { Accordion, TextInput, Group, Button, Stack, Text, Select, Card, ActionIcon } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
-import { Course, ParsedSchedule, ScheduleMeeting, FullParsingResult } from '../../types/schedule';
+import { Course, ScheduleMeeting, FullParsingResult } from '../../types/schedule';
 
 interface ValidationFormProps {
   scheduleData: FullParsingResult,

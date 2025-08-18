@@ -26,7 +26,7 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
   });
 
   async function signInWithEmail() {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    await supabase.auth.signInWithPassword({
       email: form.values.email,
       password: form.values.password,
     })

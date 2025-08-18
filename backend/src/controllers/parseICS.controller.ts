@@ -85,7 +85,7 @@ const parseICS = async (req: Request, res: Response) => {
           .where(inArray(events.calendarSourceId, accessibleSourceIds));
 
         existingDbEvents.forEach(event => {
-          existingEventsMap.set(event.externalId, event);
+          existingEventsMap.set(event.externalId!, event);
         });
       }
 
