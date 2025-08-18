@@ -1,7 +1,6 @@
 import { Paper, Button, Divider, TextInput, Anchor } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Logo from '../../Logo/Logo.tsx';
-import GoogleLogo from '../../Logo/GoogleLogo.tsx';
 import './SignIn.css'
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -44,10 +43,6 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
   return (
     <Paper radius='md' shadow='xl' className='signin-box' w={400} p={30}>
       <Logo height={60} width={350} />
-      <Button variant='default' fullWidth>
-        <GoogleLogo size={14} />
-        Sign in with Google
-      </Button>
       <Divider my='md' label="Or continue with email" labelPosition='center' />
       <form onSubmit={form.onSubmit(() => { })} style={{ width: '100%' }} >
         <TextInput
