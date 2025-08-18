@@ -1,7 +1,8 @@
 import cors from 'cors';
+require("dotenv").config();
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.CORS_ALLOWED_ORIGINS!,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
