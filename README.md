@@ -6,6 +6,8 @@
 ![Database](https://img.shields.io/badge/Database-Supabase%20(Postgres)-3FCF8E?logo=supabase)
 ![AI Powered](https://img.shields.io/badge/AI-Hugging%20Face%20VLMs-FCC624?logo=huggingface)
 
+Link: [https://smart-scheduler-flax.vercel.app/](https://smart-scheduler-flax.vercel.app/)
+
 An AI-powered web application that centralizes **course schedules, study sessions, and productivity tools** into one smart calendar.  
 
 Built with **React + TypeScript (frontend)**, **Node.js + Express + TypeScript (backend)**, and **Supabase (PostgreSQL)**, Smart Scheduler leverages **Vision-Language Models (VLMs)**, **prompt engineering**, and **intelligent preprocessing** to make managing academic life seamless.  
