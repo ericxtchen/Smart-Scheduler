@@ -1,8 +1,10 @@
 import cors from 'cors';
 require("dotenv").config();
 
+const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS!.split(',');
+
 const corsOptions = {
-  origin: process.env.CORS_ALLOWED_ORIGINS!,
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
