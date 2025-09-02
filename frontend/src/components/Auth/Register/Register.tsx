@@ -1,4 +1,4 @@
-import { Paper, Button, Divider, TextInput, Anchor } from '@mantine/core';
+import { Paper, Button, Divider, TextInput, Anchor, PasswordInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Logo from '../../Logo/Logo.tsx';
 import { SupabaseClient } from '@supabase/supabase-js';
@@ -62,7 +62,7 @@ export default function Register({ supabase, onToggleForm }: RegisterProps) {
           radius='md'
         />
 
-        <TextInput
+        <PasswordInput
           label="Password: "
           withAsterisk
           placeholder='Password'
