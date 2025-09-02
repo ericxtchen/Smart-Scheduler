@@ -38,11 +38,9 @@ export default function Register({ supabase, onToggleForm }: RegisterProps) {
 
     console.log("User registered: ", data);
   }
-  // Do i make the Paper a flex display or do I use a div and make that a flex display?
   return (
     <Paper radius='md' shadow='xl' className='signin-box' w={400} p={30}>
       <Logo height={60} width={350} />
-      <Divider my='md' label="Or continue with email" labelPosition='center' />
       <form onSubmit={form.onSubmit(() => { })} style={{ width: '100%' }} >
         <TextInput
           label="Name:"

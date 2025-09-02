@@ -3,6 +3,7 @@ import { useForm } from '@mantine/form';
 import Logo from '../../Logo/Logo.tsx';
 import './SignIn.css'
 import { SupabaseClient } from '@supabase/supabase-js';
+import { useState } from 'react';
 
 
 interface SignInProps {
@@ -11,6 +12,7 @@ interface SignInProps {
 }
 
 export default function SignIn({ supabase, onToggleForm }: SignInProps) {
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm({
     initialValues: {
@@ -31,19 +33,17 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
     });
   
     if (error) {
-      console.log("Login Error: ", error);
+      setError("Invalid email or password. Please try again.");
       return { success: false, error: error.message };
     }
-  
-    console.log("User logged in:", data.user);
+    
     return { success: true, data };
   }
 
-  // Do i make the Paper a flex display or do I use a div and make that a flex display?
+
   return (
     <Paper radius='md' shadow='xl' className='signin-box' w={400} p={30}>
       <Logo height={60} width={350} />
-      <Divider my='md' label="Or continue with email" labelPosition='center' />
       <form onSubmit={form.onSubmit(() => { })} style={{ width: '100%' }} >
         <TextInput
           label="Email:"
@@ -62,6 +62,7 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
           onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
           radius='md'
         />
+        {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
 
         <Button fullWidth radius='md' onClick={signInWithEmail}>Sign In</Button>
 
