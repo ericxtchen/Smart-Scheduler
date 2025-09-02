@@ -79,6 +79,7 @@ export const aiOutput = pgTable('ai_output', {
 export const scheduleEvents = pgTable('schedule_events', {
   id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
   aiOutputId: uuid('aiOutputId').references(() => aiOutput.id),
+  userId: uuid('user_id').notNull().references(() => users.id),
   courseName: text('course_name').notNull(), //description for the event object
   courseCode: text('course_code').notNull(), //title for the event object
   location: text('location'),
@@ -87,6 +88,16 @@ export const scheduleEvents = pgTable('schedule_events', {
   startTime: time('start_time').notNull(),
   endTime: time('end_time'),
   dayOfTheWeek: integer('day_of_the_week').array(),
+});
+
+export const pdfEvents = pgTable('pdf_events', {
+  id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+  userId: uuid('user_id').notNull().references(() => users.id),
+  title: text('title').notNull(),
+  startTime: timestamp('start_time').notNull(),
+  allDay: boolean('all_day').default(true),
+  lastModified: timestamp('last_modified', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
 // Define relations between tables

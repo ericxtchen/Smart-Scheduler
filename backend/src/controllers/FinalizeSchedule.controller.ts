@@ -10,6 +10,7 @@ import { ParsedScheduleSchema } from '../schemas/schedule.schema';
 
 interface EventsToInsertInterface {
   aiOutputId: string,
+  userId: string,
   courseName: string,
   courseCode: string,
   location: string,
@@ -69,10 +70,11 @@ export const FinalizeSchedule = async (req: Request, res: Response) => {
         const eventObj = eventsToInsert.find(obj => obj.courseCode === course_code)
         if (eventObj) {
           if (eventObj.startTime === event.startTime && eventObj.endTime === event.endTime) {
-            eventObj.dayOfTheWeek.push(dayOfWeekMap[event.dayOfWeek]); // DOES THIS ACTUALLY PUSH THE UPDATED OBJECT??
+            eventObj.dayOfTheWeek.push(dayOfWeekMap[event.dayOfWeek]);
           } else {
             eventsToInsert.push({
               aiOutputId: latestAiOutputId[0].aiOutputId,
+              userId: req.user!.id,
               courseCode: eventObj.courseCode + ` (${occurrence + 1})`,
               courseName: eventObj.courseName,
               location: eventObj.location,
@@ -87,6 +89,7 @@ export const FinalizeSchedule = async (req: Request, res: Response) => {
         } else {
           eventsToInsert.push({
             aiOutputId: latestAiOutputId[0].aiOutputId,
+            userId: req.user!.id,
             courseCode: course.courseCode,
             courseName: course.courseName,
             location: event.location,

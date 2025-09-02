@@ -1,10 +1,11 @@
 export async function UploadFile(file: File, fileType: string, token: string) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const formData = new FormData();
   formData.append(fileType, file);
-  console.log(fileType);
 
   try {
-    const endpoint = `http://localhost:3000/api/upload-${fileType}`;
+    const endpoint = `${API_BASE_URL}/api/upload-${fileType}`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -24,8 +25,9 @@ export async function UploadFile(file: File, fileType: string, token: string) {
 }
 
 export async function UploadLink(link: string, token: string) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   try {
-    const endpoint = "http://localhost:3000/api/upload-ics-link";
+    const endpoint = `${API_BASE_URL}api/upload-ics-link`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {

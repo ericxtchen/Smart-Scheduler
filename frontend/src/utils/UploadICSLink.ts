@@ -1,6 +1,7 @@
 export default async function UploadICSLink(token: string, link: string) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   try {
-    const endpoint = 'http://localhost:3000/api/upload-ics-link';
+    const endpoint = `${API_BASE_URL}/api/upload-ics-link`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
