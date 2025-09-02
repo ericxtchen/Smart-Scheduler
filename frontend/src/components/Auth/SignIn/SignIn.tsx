@@ -1,4 +1,4 @@
-import { Paper, Button, Divider, TextInput, Anchor, PasswordInput } from '@mantine/core';
+import { Paper, Button, TextInput, Anchor, PasswordInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Logo from '../../Logo/Logo.tsx';
 import './SignIn.css'
@@ -36,7 +36,7 @@ export default function SignIn({ supabase, onToggleForm }: SignInProps) {
       setError("Invalid email or password. Please try again.");
       return { success: false, error: error.message };
     }
-    
+
     return { success: true, data };
   }
 

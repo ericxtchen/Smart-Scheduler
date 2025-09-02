@@ -1,4 +1,4 @@
-import { Paper, Button, Divider, TextInput, Anchor, PasswordInput } from '@mantine/core';
+import { Paper, Button, TextInput, Anchor, PasswordInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import Logo from '../../Logo/Logo.tsx';
 import { SupabaseClient } from '@supabase/supabase-js';
