@@ -35,7 +35,7 @@ function App() {
         <Auth supabase={supabase} />
       ) : (
         <>
-          <Header />
+          <Header supabase={supabase}/>
           <Upload token={session.access_token} ref={calendarRef} />
           <Calendar ref={calendarRef} supabase={supabase} />
         </>

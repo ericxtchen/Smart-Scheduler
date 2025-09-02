@@ -3,8 +3,13 @@ import './Header.css';
 import logo from '../../../public/logo.svg';
 import StartSession from '../StartSession/StartSession.tsx';
 import Profile from '../Profile/Profile.tsx';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-export default function Header() {
+interface HeaderProps {
+  supabase: SupabaseClient
+}
+
+export default function Header({ supabase }: HeaderProps) {
   return (
     <div className='header'>
       <Container fluid size="100%" h={60} style={{ display: 'flex', justifyContent: 'space-between' }} className='container'>
@@ -13,7 +18,7 @@ export default function Header() {
           <StartSession />
         </div>
 
-        <Profile />
+        <Profile supabase={supabase}/>
       </Container>
     </div>
   );
