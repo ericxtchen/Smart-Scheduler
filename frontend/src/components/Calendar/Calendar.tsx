@@ -29,6 +29,7 @@ export default function CalendarComponent({ ref, supabase }: CalendarProps) {
     const fetchEventSources = async () => {
       const userId = await GetUser(supabase);
       if (userId) {
+        const allSources = [] as EventSourceInput[];
         try {
           const response = await fetch(`${API_BASE_URL}/api/user-calendar-sources/${userId}`);
           const calendarSources: CalendarSource[] = await response.json();
@@ -48,7 +49,20 @@ export default function CalendarComponent({ ref, supabase }: CalendarProps) {
               } as EventSourceInput;
             }
           })
-          setEventSources(sources);
+          allSources.push(...sources);
+          // Fetch PDF events
+          allSources.push({
+            url: `${API_BASE_URL}/api/pdf-events/${userId}`,
+            backgroundColor: '#34D399', // Tailwind green-400
+            textColor: '#ffffff'
+          })
+          // Fetch Schedule events
+          allSources.push({
+            url: `${API_BASE_URL}/api/schedule-events/${userId}`,
+            backgroundColor: '#F59E0B', // Tailwind yellow-500
+            textColor: '#ffffff'
+          })
+          setEventSources(allSources);
         } catch (error) {
           alert("Error fetching events: " + error)
         }
@@ -65,11 +79,9 @@ export default function CalendarComponent({ ref, supabase }: CalendarProps) {
             ref={ref}
             plugins={[timeGridPlugin, iCalendarPlugin]}
             initialView='timeGridWeek'
-            height={"100%"} // setting this to 100% messes up the calendar
+            height={"100%"}
             expandRows={true}
             eventSources={eventSources}
-          // how to make the calendar shrink but make the rest of the calendar thats not intially visible scrollable to see
-          //events={fetchEvents(token)}
           />
         </div>
       </Paper>

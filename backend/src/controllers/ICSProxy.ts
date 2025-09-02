@@ -4,7 +4,7 @@ export const icsProxy = async (req: Request, res: Response) => {
     try {
         const url = req.query.url;
         if(!url) {
-            res.status(400).json({error: "No URL prdovided"})
+            res.status(400).json({error: "No URL provided"})
         } else{
             const response = await fetch(url as string);
             const data = await response.text();
