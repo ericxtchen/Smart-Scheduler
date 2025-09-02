@@ -4,8 +4,9 @@
 
 
 export default async function fetchEvents(token: string) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
   try {
-    const endpoint = "http://localhost:3000/api/calendar/events";
+    const endpoint = `${API_BASE_URL}/api/calendar/events`;
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
